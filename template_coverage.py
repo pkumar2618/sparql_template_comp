@@ -105,3 +105,5 @@ for template in templates:
                                                 "bgp_type": bgp_type, "bgp_facts": count_bgp_facts, "bgp_triples": count_bgp_triples,
                                                 "bgp_doubles": count_bgp_doubles, "bgp_constraints": ""},
                                                ignore_index=True).fillna("tbd")
+
+    template_type_df.to_csv(("triple_count_based_classification.csv"), index=False)
