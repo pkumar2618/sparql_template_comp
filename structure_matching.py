@@ -25,19 +25,34 @@ templates = json.load(open(file_name, 'r'))
 #                                          "bgp_doubles",
 #                                          "bgp_constraints"])
 
-template_graphs = {}
+# template_graphs = {}
 template_count = 1
-# for template in templates:
-
+for template in templates:
+    template_count +=1
     # Create Template-graph tg
-template = templates[0]["sparql_dbpedia18"]
-q1_graph = QueryGraph(template)
+    template = template["sparql_dbpedia18"]
 
-for s, p, o in q1_graph.processed_graph:
-        print("printing triples in the processed_graph")
-        print((s, p, o))
+    try:
+        q1_graph = QueryGraph(template)
+        for s, p, o in q1_graph.processed_graph:
+            print("printing triples in the processed_graph")
+            print((s, p, o))
+        print("eqality of g1 and g1:", q1_graph.compare_for_equality(q1_graph))
 
-print("eqality of g1 and g1:", q1_graph.compare_for_equality(q1_graph))
+    except Exception as e:
+        query_algebra = prepareQuery(template)
+        pprintAlgebra(query_algebra)
+
+    print('\n', template_count)
+print("run_finished")
+# print("debug_finished")
+
+# template2 = templates[1]["sparql_dbpedia18"]
+    # q2_graph = QueryGraph(template2)
+    # for s, p, o in q2_graph.processed_graph:
+    #         print("printing triples in the graph2")
+    #         print((s, p, o))
+
 
 # template1 = "select distinct ?ans where { ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://wikidata.dbpedia.org/resource/Q204711> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P1128> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?ans. }"
 # template1 = "select distinct ?ans where { [] <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://wikidata.dbpedia.org/resource/Q204711> . [] <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P1128> . [] <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?ans. }"
@@ -59,53 +74,23 @@ print("eqality of g1 and g1:", q1_graph.compare_for_equality(q1_graph))
 # print("similarity of g1 and g1_s:", q1_graph.compare_for_similarity(q1_s_graph))
 
 
-template2 = templates[1]["sparql_dbpedia18"]
+
 # template1_s = "select distinct ?answer where { ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://wikidata.dbpedia.org/resource/Q204711> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P1128> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?answer. }"
 # q1_s_graph = QueryGraph(template1_s)
 # template2 = "select distinct ?answer where { ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#object>  ?answer. ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P1128> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://wikidata.dbpedia.org/resource/Q204711>. }"
-q2_graph = QueryGraph(template2)
+# q2_graph = QueryGraph(template2)
 #
 # for s, p, o in q1_s_graph.graph:
 #         print("printing triples in the graph1")
 #         print((s, p, o))
 #
-for s, p, o in q2_graph.processed_graph:
-        print("printing triples in the graph2")
-        print((s, p, o))
+# for s, p, o in q2_graph.processed_graph:
+#         print("printing triples in the graph2")
+#         print((s, p, o))
 #
 #
-print("comparision of g1 and g2:", q1_graph.compare_for_equality(q2_graph))
-print("similarity of g1 and g2:", q1_graph.compare_for_similarity(q2_graph))
-
-
-print("debug_finished")
-    # template_graphs["g" + template_count] = graph.parse(triple)
-
-    # a_node1 = BNode()
-    # a_node2 = BNode()
-    # a_ref = URIRef('')
-    # triple = (a_node1, a_ref, a_node2)
-    ## using direct algebra
-
-    # graph.add(triple)
-    # for s in graph.subjects((None)):
-    #     print("%s is a subject" % s)
-
-    # for s, p, o in graph:
-    #     print("printing triples in the graph")
-    #     print((s, p, o))
-
-    # template_graphs["g%s" %template_count] = graph
-    # print(len(template_graphs["g1"]))
-
-    # try:
-
-        # print(g.serialize(format='json-ld', indent=4))
-    # except Exception as e:
-    #     print(e)
+# print("comparision of g1 and g2:", q1_graph.compare_for_equality(q2_graph))
+# print("similarity of g1 and g2:", q1_graph.compare_for_similarity(q2_graph))
 
 # g = rdflib.Graph()
 # # g.load("foaf.rdf")
-
-# for row in g.query('select ?s where { [] <http://xmlns.com/foaf/0.1/knows> ?s .}'):
-#     print(row)

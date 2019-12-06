@@ -55,13 +55,13 @@ class QueryGraph:
         var_count = 0
         for variable in self.bgp_variables:
             var_count += 1
-            bgp_variables_dict[variable] = "var%d" %var_count
+            bgp_variables_dict[variable] = "var%d" % var_count
 
         param_variables_dict = {}
-        param_var_count =0
+        param_var_count = 0
         for pv in self.parameter_variables:
             param_var_count += 1
-            param_variables_dict[pv] = "param_var%d" %param_var_count
+            param_variables_dict[pv] = "param_var%d" % param_var_count
 
         # anonymizing uri's
         uri_seen_dict = {}
