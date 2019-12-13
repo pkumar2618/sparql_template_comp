@@ -23,11 +23,8 @@ class QueryGraph:
         """sparql_query is query string, which will be converted into sparqlAlgebra
         during construction.
         """
-        # Create queryGraph
-        # self.graph = Graph()
 
         ## using direct algebra
-
         query_algebra = prepareQuery(sparql_query, initNs = prefix_bindings)
         # pprintAlgebra(query_algebra)
 
@@ -44,64 +41,59 @@ class QueryGraph:
 
         bgp_expression = self.find_p_name_list('BGP')
         # self.bgp_variables = query_algebra.algebra['p']['p']['p']['_vars']
+
         try:
+            # Create queryGraph
+            # self.graph = Graph()
+            # for triple in triples_list:
+            #     self.graph.add(triple)
+
+            # Create processed queryGraph
+            self.processed_graph = Graph()
+
             self.bgp_variables = bgp_expression['_vars']
             triples_list = bgp_expression['triples']
+            bgp_variables_dict = {}
+            var_count = 0
+            param_variables_dict = {}
+            param_var_count = 0
+
+            for variable in self.bgp_variables:
+                if variable not in self.parameter_variables:
+                    var_count += 1
+                    bgp_variables_dict[variable] = "var%d" % var_count
+
+            for pv in self.parameter_variables:
+                param_var_count += 1
+                param_variables_dict[pv] = "param_var%d" % param_var_count
+
+            # anonymizing uri's
+            uri_seen_dict = {}
+            uri_seen_count = 0
+            for tuple_spo in triples_list:
+                processed_tuple_spo = []
+                for item in tuple_spo:
+                    if item in param_variables_dict.keys():
+                        processed_tuple_spo.append(URIRef(param_variables_dict[item]))
+
+                    elif item in bgp_variables_dict.keys():
+                        processed_tuple_spo.append(URIRef(bgp_variables_dict[item]))
+
+                    elif isinstance(item, URIRef):
+                        processed_tuple_spo.append(item)
+
+                        # if item not in uri_seen_dict.keys():
+                        #     # uri_seen_count += 1
+                        #     # uri_seen_dict[item] = "uri_ref_%d" %uri_seen_count
+                        #     # processed_tuple_spo.append(URIRef(uri_seen_dict[item]))
+                        # elif item in uri_seen_dict.keys():
+                        #     processed_tuple_spo.append(URIRef(uri_seen_dict[item]))
+
+                processed_tuple_spo = tuple(processed_tuple_spo)
+                self.processed_graph.add(processed_tuple_spo)
+
         except Exception as e:
             pass
-        # print(' '.join(bgp_variables))
-
-        # triples_list = query_algebra.algebra['p']['p']['p']['triples']
-
-        # for triple in triples_list:
-        #     self.graph.add(triple)
-
-        # Create processed queryGraph
-        self.processed_graph = Graph()
-
-        # re_variables = re.compile(r"[?$]\w+\.?")
-        # re_URIRef = re.compile(r'<([^\s"<>]+)>')
-
-        bgp_variables_dict = {}
-        var_count = 0
-        param_variables_dict = {}
-        param_var_count = 0
-        for variable in self.bgp_variables:
-            if variable not in self.parameter_variables:
-                var_count += 1
-                bgp_variables_dict[variable] = "var%d" % var_count
-
-        for pv in self.parameter_variables:
-            param_var_count += 1
-            param_variables_dict[pv] = "param_var%d" % param_var_count
-
-        # anonymizing uri's
-        uri_seen_dict = {}
-        uri_seen_count = 0
-        for tuple_spo in triples_list:
-            processed_tuple_spo = []
-            for item in tuple_spo:
-                if item in param_variables_dict.keys():
-                    processed_tuple_spo.append(URIRef(param_variables_dict[item]))
-
-                elif item in bgp_variables_dict.keys():
-                    processed_tuple_spo.append(URIRef(bgp_variables_dict[item]))
-
-                elif isinstance(item, URIRef):
-                    processed_tuple_spo.append(item)
-
-                    # if item not in uri_seen_dict.keys():
-                    #     # uri_seen_count += 1
-                    #     # uri_seen_dict[item] = "uri_ref_%d" %uri_seen_count
-                    #     # processed_tuple_spo.append(URIRef(uri_seen_dict[item]))
-                    # elif item in uri_seen_dict.keys():
-                    #     processed_tuple_spo.append(URIRef(uri_seen_dict[item]))
-
-            processed_tuple_spo = tuple(processed_tuple_spo)
-            self.processed_graph.add(processed_tuple_spo)
-
-    # def __reduce__(self):
-    #     return (self.__class__, (self.processed_graph,))
 
 
     def find_p_name_list(self, p_name):

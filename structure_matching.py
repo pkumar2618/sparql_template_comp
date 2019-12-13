@@ -31,16 +31,20 @@ qald_queries_df = pd.read_csv(file_name)
 queries = qald_queries_df['query']
 
 # re_qald_sparql = re.compile(r"[]\w+\.?")
-count = 0
+count = 1
 for query in queries:
-    query = queries[8]
-    query = eval(query)['sparql']
-    q_graph = QueryGraph(query, {})
-    count += 1
-    for s, p, o in q_graph.processed_graph:
-        print("printing triples in the processed_graph")
-        print((s, p, o))
-    print("query number %d parsed successfully:" %count)
+    # query = queries[8]
+    try:
+        query = eval(query)['sparql']
+        q_graph = QueryGraph(query, {})
+        count += 1
+        for s, p, o in q_graph.processed_graph:
+            print("printing triples in the processed_graph")
+            print((s, p, o))
+        print("query number %d parsed successfully:" %count)
+
+    except Exception as e:
+        pass
     # for template_graph in template_store_df["template_structure_graph"]:
         # for s, p, o in template_graph:
         #     print("printing triples in the processed_graph")
