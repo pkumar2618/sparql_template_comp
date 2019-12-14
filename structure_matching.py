@@ -32,24 +32,39 @@ queries = qald_queries_df['query']
 
 # re_qald_sparql = re.compile(r"[]\w+\.?")
 count = 1
+
 for query in queries:
-    # query = queries[8]
+# query = queries[3]
     try:
         query = eval(query)['sparql']
         q_graph = QueryGraph(query, {})
         count += 1
+        print("Query Structure:")
         for s, p, o in q_graph.processed_graph:
             print("printing triples in the processed_graph")
             print((s, p, o))
-        print("query number %d parsed successfully:" %count)
+        print("\n")
+        try:
+            for template_graph in template_store_df["template_structure_graph"]:
+                # template_graph = template_store_df["template_structure_graph"][2]
+                # print("template structure")
+                # for s, p, o in template_graph:
+                #     print("printing triples in the processed_graph")
+                #     print((s, p, o))
+                if isomorphic(q_graph.processed_graph, template_graph):
+                    print("query_graph and template_graph are isomorphic", )
+                    print("template structure")
+                    for s, p, o in template_graph:
+                        print("printing triples in the processed_graph")
+                        print((s, p, o))
+                    print("\n")
+
+        except Exception as e:
+            print("exception during graph comparision", e)
 
     except Exception as e:
-        pass
-    # for template_graph in template_store_df["template_structure_graph"]:
-        # for s, p, o in template_graph:
-        #     print("printing triples in the processed_graph")
-        #     print((s, p, o))
-        # print("eqality of g1 and g1:", isomorphic(template_graph, template_graph))
+        print("exception during qald-query read at query %d" %(count + 1), e)
+
 
 
 
