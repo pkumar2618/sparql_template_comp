@@ -89,7 +89,7 @@ class QueryGraph:
 
                 processed_tuple_spo = tuple(processed_tuple_spo)
                 self.processed_triples.append(processed_tuple_spo)
-                # self.processed_graph.add(processed_tuple_spo)
+                self.processed_graph.add(processed_tuple_spo)
 
         except Exception as e:
             pass

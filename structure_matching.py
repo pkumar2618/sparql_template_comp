@@ -40,46 +40,65 @@ qald_stat_with_templates_df = pd.DataFrame(columns=["query_question", "template_
 
 query_row_index = 0
 for query in queries:
-# query = queries[3]
+    # query = queries[891]
     try:
         query = eval(query)['sparql']
         q_graph = QueryGraph(query, {})
-        print("Query Structure:")
-        for s, p, o in q_graph.processed_graph:
-            print((s, p, o))
-        print("\n")
-
-        try:
-            template_row_index = 0
-            for template_triples_list in template_store_df["template_processed_triples"]:
-                # template_graph = template_store_df["template_structure_graph"][2]
-                template_graph = triples_list_to_graph(eval(template_triples_list))
-
-                print("template structure")
-                for s, p, o in template_graph:
-                    # print("printing triples in the processed_graph")
-                    print((s, p, o))
+        # print("Query Structure:")
+        # for s, p, o in q_graph.processed_graph:
+        #     print((s, p, o))
+        # print("\n")
+        template_row_index = 0
+        for template_triples_list in template_store_df["template_processed_triples"]:
+            # template_graph = template_store_df["template_structure_graph"][2]
+            template_graph = triples_list_to_graph(eval(template_triples_list))
+            # print("template structure")
+            # for s, p, o in template_graph:
+            # print("printing triples in the processed_graph")
+            # print((s, p, o))
+            try:
                 if isomorphic(q_graph.processed_graph, template_graph):
-                    print("query_graph and template_graph are isomorphic", )
+                    # print("query_graph and template_graph are isomorphic", )
                     # print("template structure")
                     # for s, p, o in template_graph:
                     #     print("printing triples in the processed_graph")
                     #     print((s, p, o))
-                    print("\n")
+                    # print("\n")
                     qald_stat_with_templates_df = qald_stat_with_templates_df.append(
                         {"query_question": qald_queries_df.iloc[query_row_index]['sentence_en'],
                          "template_question": template_store_df.iloc[template_row_index]["question"],
                          "query_triples": q_graph.triples_list,
                          "template_triples": template_store_df.iloc[template_row_index]["triples_list"],
-                         "question_type": template_store_df.iloc[query_row_index]["question_type"]},
+                         "question_type": template_store_df.iloc[template_row_index]["question_type"]},
                         ignore_index=True).fillna("tbd")
-        except Exception as e:
-            print("exception during graph comparision", e)
-        template_row_index += 1
+                    break
+
+            except Exception as e:
+                print('\n')
+                print("for query index %d and template index %d" % (query_row_index, template_row_index))
+                print("Query Structure:")
+                for s, p, o in q_graph.processed_graph:
+                    print((s, p, o))
+                print("template structure")
+
+                for s, p, o in template_graph:
+                    print("printing triples in the processed_graph")
+                    print((s, p, o))
+                print("\n")
+                print("exception during graph comparision or during append to dataframe", e)
+
+            template_row_index += 1
 
     except Exception as e:
-        print("exception during qald-query read at query %d" %(query_row_index + 1), e)
+        print("exception during qald-query read at query index %d" % (query_row_index))
+        print("exception is", e)
+
     query_row_index += 1
+
+with open("stats_qaldCombined_vs_LCQUAD2.csv", 'w') as filename:
+    qald_stat_with_templates_df.to_csv(filename)
+
+
 
 
 
