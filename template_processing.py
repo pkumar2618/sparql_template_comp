@@ -6,7 +6,7 @@ import pickle
 
 
 template_store_df= pd.DataFrame(columns=["question", "template", "template_id", "question_type", "query_type", "query_variables",
-                                         "bgp_variables", "template_structure_graph", "triples_list"])
+                                         "bgp_variables", "triples_list", "template_processed_triples"])
 
 
 wiki_prefixes = {"wd": "http://www.wikidata.org/entity/",
@@ -41,7 +41,7 @@ for filename in files:
                     template_store_df = template_store_df.append(
                         {"question": template_temp["question"], "query_type": q_graph.query_type,
                          "query_variables": q_graph.parameter_variables, "bgp_variables": q_graph.bgp_variables,
-                         "template_structure_graph": q_graph.processed_graph, "triples_list": q_graph.triples_list},
+                         "triples_list": q_graph.triples_list, "template_processed_triples": q_graph.processed_triples},
                         ignore_index=True).fillna("tbd")
                 except Exception as e:
                     print("exception encountered")
@@ -71,12 +71,14 @@ for filename in files:
                             {"question": template_temp["question"], "template": template_temp["template"],
                              "template_id": template_temp["template_id"], "query_type": q_graph.query_type,
                              "query_variables": q_graph.parameter_variables, "bgp_variables": q_graph.bgp_variables,
-                             "template_structure_graph": q_graph.processed_graph, "triples_list": q_graph.triples_list},
-                            ignore_index=True).fillna("tbd")
+                             "template_processed_triples": q_graph.processed_triples,
+                             "triples_list": q_graph.triples_list}, ignore_index=True).fillna("tbd")
                     except Exception as e:
                         print("exception encountered")
+
                 except Exception as e:
                     print("KeyError: %s not found" %e)
+
             else:
                 continue
 

@@ -50,6 +50,8 @@ class QueryGraph:
 
             self.bgp_variables = bgp_expression['_vars']
             self.triples_list = bgp_expression['triples']
+            self.processed_triples = []
+
             bgp_variables_dict = {}
             var_count = 0
             param_variables_dict = {}
@@ -86,7 +88,8 @@ class QueryGraph:
                             processed_tuple_spo.append(URIRef(uri_seen_dict[item]))
 
                 processed_tuple_spo = tuple(processed_tuple_spo)
-                self.processed_graph.add(processed_tuple_spo)
+                self.processed_triples.append(processed_tuple_spo)
+                # self.processed_graph.add(processed_tuple_spo)
 
         except Exception as e:
             pass
@@ -148,3 +151,8 @@ class QueryGraph:
             if display == "True":
                 Source.main(f)
             # print(done)
+def triples_list_to_graph(triples_list):
+    q_graph = Graph()
+    for tuple in triples_list:
+        q_graph.add(tuple)
+    return q_graph
