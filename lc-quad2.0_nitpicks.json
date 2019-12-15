@@ -1,11 +1,13 @@
 [
   {
-		"question": "Who are the employees of Food and Drug Administration?",
-		"sparql_dbpedia18": "select distinct ?answer where { ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://wikidata.dbpedia.org/resource/Q204711> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P1128> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?answer. }"
+	  	"question": "The head of state of Bermuda is what?",
+        "sparql_wikidata": "select distinct ?answer where { wd:Q23635 wdt:P35 ?answer}",
+        "sparql_dbpedia18": "select distinct ?answer where { ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://wikidata.dbpedia.org/resource/Q23635> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P35> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?answer. }"
 	},
 	{
-		"question": "Who is the developer of Free Software Foundation?",
-		"sparql_dbpedia18": "select distinct ?answer where { ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject>  ?answer. ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P178> . ?statement <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://wikidata.dbpedia.org/resource/Q48413>. }"
+		"question": "Where is the birthplace of Urban VI which is adjacent to San Giorgio a Crremano?",
+        "sparql_wikidata": "SELECT ?answer WHERE { wd:Q171626 wdt:P19 ?answer . ?answer wdt:P47 wd:Q72497}",
+        "sparql_dbpedia18": "SELECT ?answer WHERE { ?statement1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://wikidata.dbpedia.org/resource/Q171626> . ?statement1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P19>. ?statement1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?answer . ?statement2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?answer. ?statement2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P47> . ?statement2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://wikidata.dbpedia.org/resource/Q72497> . }"
 	},
 	{
 		"question": "Who is the translator of The Jungle Book?",
@@ -90,7 +92,7 @@
 	{
 		"question": "Which central bank has the highest target interest rate ?",
 		"sparql_dbpedia18": "select ?ent where {\n?ent <http://www.wikidata.org/entity/P31> <http://wikidata.dbpedia.org/resource/Q4830453>.\n\n?statement1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?ent .\n?statement1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P2661>.\n?statement1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?obj1.\n\n?statement2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?ent .\n?statement2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://www.wikidata.org/entity/P31> .\n?statement2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <http://wikidata.dbpedia.org/resource/Q66344> .\n\n}\nORDER BY DESC(?obj1)\nLIMIT 5",
-		"sparql_wikidata": "select ?ent where { ?ent wdt:P31 wd:Q4830453 . ?ent wdt:P2661 ?obj } ?ent wdt:P31 wd:Q66344 ORDER BY DESC(?obj)LIMIT 5 "
+		"sparql_wikidata": "select ?ent where { ?ent wdt:P31 wd:Q4830453 . ?ent wdt:P2661 ?obj . ?ent wdt:P31 wd:Q66344} ORDER BY DESC(?obj)LIMIT 5 "
 	},
 	{
 		"question": "What is the name of a battle that has the word siege in it.",
